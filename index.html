@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ai-Hsien Adams Li, MD, PhD, MPH</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Georgia', serif;
+      background: #f4f6f9;
+      color: #222;
+      line-height: 1.7;
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #1a3a5c;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0;
+    }
+    nav a {
+      color: #cde4f5;
+      text-decoration: none;
+      padding: 14px 20px;
+      font-family: Arial, sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: background 0.2s;
+    }
+    nav a:hover { background: #2d6a9f; color: #fff; }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #2d6a9f 60%, #4a9edd 100%);
+      color: #fff;
+      padding: 70px 20px 60px;
+      text-align: center;
+    }
+    .hero-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+    .avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: rgba(255,255,255,0.8);
+      flex-shrink: 0;
+    }
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: normal;
+      letter-spacing: 0.02em;
+    }
+    .hero .subtitle {
+      font-size: 1.05rem;
+      color: #cde4f5;
+      max-width: 640px;
+    }
+    .hero .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .tag {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.82rem;
+      font-family: Arial, sans-serif;
+    }
+    .hero-contact {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      justify-content: center;
+      font-size: 0.88rem;
+      color: #cde4f5;
+      font-family: Arial, sans-serif;
+    }
+    .hero-contact a { color: #a8d8f8; text-decoration: none; }
+    .hero-contact a:hover { text-decoration: underline; }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    /* ── Section ── */
+    section { margin-bottom: 52px; }
+    .section-title {
+      font-size: 1.35rem;
+      color: #1a3a5c;
+      border-bottom: 2px solid #2d6a9f;
+      padding-bottom: 8px;
+      margin-bottom: 24px;
+      font-weight: bold;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      font-family: Arial, sans-serif;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      padding: 22px 26px;
+      margin-bottom: 16px;
+    }
+    .card h3 {
+      color: #1a3a5c;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+    .card .meta {
+      font-size: 0.82rem;
+      color: #2d6a9f;
+      font-family: Arial, sans-serif;
+      margin-bottom: 6px;
+    }
+    .card p { font-size: 0.93rem; color: #444; }
+
+    /* ── Two-column grid ── */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 620px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    /* ── Stats row ── */
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .stat-box {
+      background: #1a3a5c;
+      color: #fff;
+      border-radius: 8px;
+      padding: 20px 28px;
+      text-align: center;
+      min-width: 130px;
+      flex: 1;
+    }
+    .stat-box .num {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #7ec8e3;
+    }
+    .stat-box .label {
+      font-size: 0.78rem;
+      font-family: Arial, sans-serif;
+      color: #cde4f5;
+      margin-top: 4px;
+    }
+
+    /* ── Timeline ── */
+    .timeline { list-style: none; position: relative; padding-left: 24px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: #2d6a9f;
+      opacity: 0.3;
+    }
+    .timeline li {
+      position: relative;
+      margin-bottom: 18px;
+      padding-left: 20px;
+    }
+    .timeline li::before {
+      content: '';
+      position: absolute;
+      left: -18px;
+      top: 8px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #2d6a9f;
+    }
+    .timeline .yr {
+      font-size: 0.78rem;
+      color: #2d6a9f;
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+    }
+    .timeline .role { font-size: 0.95rem; font-weight: bold; color: #1a3a5c; }
+    .timeline .org { font-size: 0.87rem; color: #555; }
+
+    /* ── News cards ── */
+    .news-card {
+      background: #fff;
+      border-left: 4px solid #2d6a9f;
+      border-radius: 0 8px 8px 0;
+      padding: 18px 22px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+    }
+    .news-card .news-num {
+      display: inline-block;
+      background: #2d6a9f;
+      color: #fff;
+      font-size: 0.75rem;
+      font-family: Arial, sans-serif;
+      border-radius: 4px;
+      padding: 1px 8px;
+      margin-bottom: 8px;
+    }
+    .news-card h3 { font-size: 0.98rem; color: #1a3a5c; margin-bottom: 6px; }
+    .news-card p { font-size: 0.88rem; color: #555; }
+
+    /* ── Publication list ── */
+    .pub-list { list-style: none; }
+    .pub-list li {
+      background: #fff;
+      border-radius: 6px;
+      padding: 12px 18px;
+      margin-bottom: 10px;
+      font-size: 0.87rem;
+      color: #444;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      border-left: 3px solid #4a9edd;
+    }
+    .pub-list li strong { color: #1a3a5c; }
+
+    /* ── Skills chips ── */
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      background: #e8f1fb;
+      color: #1a3a5c;
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 0.83rem;
+      font-family: Arial, sans-serif;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: #1a3a5c;
+      color: #8ab4cc;
+      text-align: center;
+      padding: 28px 20px;
+      font-family: Arial, sans-serif;
+      font-size: 0.82rem;
+    }
+    footer a { color: #7ec8e3; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Responsive hero ── */
+    @media (min-width: 620px) {
+      .hero-inner { flex-direction: row; text-align: left; }
+      .hero .tags { justify-content: flex-start; }
+      .hero-contact { justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <a href="#about">About</a>
+  <a href="#current">Current</a>
+  <a href="#education">Education</a>
+  <a href="#experience">Experience</a>
+  <a href="#research">Research</a>
+  <a href="#publications">Publications</a>
+  <a href="#news">Biomedical News</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="avatar">&#9760;</div>
+    <div>
+      <h1>Ai-Hsien Adams Li</h1>
+      <p class="subtitle" style="margin-top:8px;">MD &nbsp;|&nbsp; PhD &nbsp;|&nbsp; MPH &mdash; Cardiologist &amp; Biomedical Researcher</p>
+      <div class="tags" style="margin-top:14px;">
+        <span class="tag">Cardiology</span>
+        <span class="tag">Biomedical Engineering</span>
+        <span class="tag">Neuroradiology</span>
+        <span class="tag">AI in Medicine</span>
+        <span class="tag">Public Health</span>
+        <span class="tag">Health Management</span>
+      </div>
+      <div class="hero-contact" style="margin-top:16px;">
+        <span>&#9993; <a href="mailto:las1012.tw@gmail.com">las1012.tw@gmail.com</a></span>
+        <span>&#127758; Mississauga, Canada &amp; New Taipei, Taiwan</span>
+        <span>&#128279; <a href="https://scholar.google.com/citations?user=dsih3e4AAAAJ" target="_blank">Google Scholar</a></span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- About -->
+  <section id="about">
+    <div class="section-title">About Me</div>
+    <div class="card">
+      <p>
+        I am a physician-scientist with over 30 years of clinical, research, and academic experience spanning
+        cardiology, biomedical engineering, neuroradiology, and public health. My career has taken me across
+        Taiwan, Canada, China, France, and the United States, allowing me to contribute to medical practice
+        at both bedside and bench levels.
+      </p>
+      <br>
+      <p>
+        My interdisciplinary background — combining an MD from National Taiwan University, a PhD in
+        Biomedical Engineering, and an MPH from Johns Hopkins Bloomberg School of Public Health — drives
+        my passion for translating cutting-edge research into improved patient outcomes. I am particularly
+        interested in applying deep learning and AI to cardiovascular and pulmonary disease diagnostics.
+      </p>
+    </div>
+
+    <!-- Research metrics -->
+    <div class="stats" style="margin-top:20px;">
+      <div class="stat-box">
+        <div class="num">935</div>
+        <div class="label">Total Citations</div>
+      </div>
+      <div class="stat-box">
+        <div class="num">15</div>
+        <div class="label">h-index</div>
+      </div>
+      <div class="stat-box">
+        <div class="num">23</div>
+        <div class="label">i10-index</div>
+      </div>
+      <div class="stat-box">
+        <div class="num">50+</div>
+        <div class="label">Publications</div>
+      </div>
+      <div class="stat-box">
+        <div class="num">3</div>
+        <div class="label">US Patents</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Current Status -->
+  <section id="current">
+    <div class="section-title">Current Status</div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Director &amp; Staff Physician</h3>
+        <div class="meta">Far Eastern Memorial Hospital, New Taipei City, Taiwan &nbsp;|&nbsp; 2018 – Present</div>
+        <p>Health Management Center — leading preventive medicine, executive health screening, and chronic disease management programs.</p>
+      </div>
+      <div class="card">
+        <h3>Visiting Staff — Cardiology &amp; Internal Medicine</h3>
+        <div class="meta">Far Eastern Memorial Hospital, New Taipei City, Taiwan &nbsp;|&nbsp; 2018 – Present</div>
+        <p>Active clinical practice in interventional cardiology and general internal medicine.</p>
+      </div>
+      <div class="card">
+        <h3>Adjunct Assistant Professor</h3>
+        <div class="meta">National Taiwan University Medical College, Taipei &nbsp;|&nbsp; 2012 – Present</div>
+        <p>Teaching and mentoring medical students and residents at one of Asia's leading medical institutions.</p>
+      </div>
+      <div class="card">
+        <h3>Adjunct Assistant Professor</h3>
+        <div class="meta">Yuan Ze University, Dept. of Information Management &nbsp;|&nbsp; 2010 – Present</div>
+        <p>Bridging clinical medicine and information technology; contributing to health informatics curriculum.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section id="education">
+    <div class="section-title">Education</div>
+    <ul class="timeline">
+      <li>
+        <div class="yr">Jan 2010 – May 2012</div>
+        <div class="role">Master of Public Health (MPH)</div>
+        <div class="org">Bloomberg School of Public Health, Johns Hopkins University — Baltimore, USA</div>
+        <div style="font-size:0.83rem;color:#666;margin-top:4px;">
+          Capstone: <em>Using Statistical Process Control to Shorten Door-to-Balloon Time and Reduce Mortality in STEMI Patients</em>
+        </div>
+      </li>
+      <li>
+        <div class="yr">Sep 2002 – Jan 2008</div>
+        <div class="role">Doctor of Philosophy (PhD) — Biomedical Engineering</div>
+        <div class="org">Chung Yuan Christian University, Chung-Li City, Taiwan, ROC</div>
+      </li>
+      <li>
+        <div class="yr">Nov 2005 – Apr 2007</div>
+        <div class="role">Diplôme Interuniversitaire — Neurovascular Disease</div>
+        <div class="org">Université Paris XI, France</div>
+      </li>
+      <li>
+        <div class="yr">Sep 1986 – Jun 1993</div>
+        <div class="role">Doctor of Medicine (MD)</div>
+        <div class="org">College of Medicine, National Taiwan University, Taipei, Taiwan, ROC</div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Work Experience -->
+  <section id="experience">
+    <div class="section-title">Work Experience</div>
+    <ul class="timeline">
+      <li>
+        <div class="yr">2018 – Present</div>
+        <div class="role">Director &amp; Staff Physician, Health Management Center</div>
+        <div class="org">Far Eastern Memorial Hospital, New Taipei, Taiwan</div>
+      </li>
+      <li>
+        <div class="yr">Nov 2015 – Mar 2018</div>
+        <div class="role">Deputy Director, Cardiocerebrovascular Hospital</div>
+        <div class="org">HeilongJiang Far East Cardiocerebrovascular Hospital, Harbin, China</div>
+      </li>
+      <li>
+        <div class="yr">Dec 2014 – Oct 2015</div>
+        <div class="role">Attending Physician, Section of Cardiology</div>
+        <div class="org">Far Eastern Memorial Hospital, Taipei, Taiwan</div>
+      </li>
+      <li>
+        <div class="yr">Sep 2012 – Nov 2014</div>
+        <div class="role">Postdoctoral Fellow, Cardiac Function Laboratory</div>
+        <div class="org">Ottawa Heart Institute, Ottawa, Canada</div>
+      </li>
+      <li>
+        <div class="yr">Nov 2007 – Aug 2012</div>
+        <div class="role">Attending Physician &amp; Director, Section of Cardiology</div>
+        <div class="org">Far Eastern Memorial Hospital, Taipei, Taiwan</div>
+      </li>
+      <li>
+        <div class="yr">Aug 2006 – Oct 2007</div>
+        <div class="role">Attending Physician, Internal Medicine</div>
+        <div class="org">Min-Sheng General Hospital, Taiwan</div>
+      </li>
+      <li>
+        <div class="yr">May 2005 – Oct 2005</div>
+        <div class="role">Clinical Fellowship</div>
+        <div class="org">Toronto Western Hospital &amp; Stanford University Hospital</div>
+      </li>
+      <li>
+        <div class="yr">May 2000 – Apr 2005</div>
+        <div class="role">Attending Physician &amp; Director, Catheterization Center</div>
+        <div class="org">Far Eastern Memorial Hospital, Taipei, Taiwan</div>
+      </li>
+      <li>
+        <div class="yr">Jul 1995 – Jun 2000</div>
+        <div class="role">Resident &amp; Fellow, Internal Medicine &amp; Cardiology</div>
+        <div class="org">National Taiwan University Hospital, Taipei, Taiwan</div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Research & Expertise -->
+  <section id="research">
+    <div class="section-title">Research Interests &amp; Expertise</div>
+    <div class="chips" style="margin-bottom:24px;">
+      <span class="chip">Interventional Cardiology</span>
+      <span class="chip">Deep Learning / AI in Medicine</span>
+      <span class="chip">Lung Nodule Detection</span>
+      <span class="chip">Neuroradiology &amp; Stroke</span>
+      <span class="chip">Cardiovascular Imaging</span>
+      <span class="chip">Health Informatics</span>
+      <span class="chip">Quality Improvement</span>
+      <span class="chip">Biomedical Engineering</span>
+      <span class="chip">Statistical Process Control</span>
+      <span class="chip">Federated Learning</span>
+      <span class="chip">Myocardial Matrix Biology</span>
+      <span class="chip">Wearable Device Data</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Certifications &amp; Qualifications</h3>
+        <div class="meta" style="margin-top:8px;">Selected highlights</div>
+        <ul style="font-size:0.87rem;color:#444;padding-left:18px;margin-top:8px;">
+          <li>MCCQE 1 &amp; MCCEE Passed (2012, 2006)</li>
+          <li>NAC OSCE Passed (2012)</li>
+          <li>Specialist in Cardiology (ROC, 2000)</li>
+          <li>Specialist in Critical Care Medicine (ROC, 2002)</li>
+          <li>Specialist in Internal Medicine (ROC, 1998)</li>
+          <li>Fellow, American Society of Angiology (2007)</li>
+          <li>Licensed Biomedical Engineer, ROC (2008)</li>
+          <li>Subspecialty — Intracranial Intervention, Neuroradiology Society of Taiwan (2010)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Patents &amp; Journal Reviewer</h3>
+        <div class="meta" style="margin-top:8px;">US Patents</div>
+        <ul style="font-size:0.87rem;color:#444;padding-left:18px;margin-top:8px;">
+          <li>US Patent 11,690,569 — Blood Vessel Detecting Apparatus &amp; Method (2023)</li>
+          <li>US Patent 11,342,078 — Blood Vessel Status Evaluation (2022)</li>
+          <li>US Patent 11,017,534 — Blood Vessel Status Evaluation Device (2021)</li>
+        </ul>
+        <div class="meta" style="margin-top:12px;">SCI Journal Reviewer</div>
+        <ul style="font-size:0.87rem;color:#444;padding-left:18px;margin-top:6px;">
+          <li>BMJ Case Reports (since 2011)</li>
+          <li>BMJ Trials (since 2012)</li>
+          <li>Medical Care (since 2012)</li>
+          <li>International Journal of Cardiology (since 2013)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Plans -->
+  <section id="plans">
+    <div class="section-title">Plans &amp; Vision</div>
+    <div class="card">
+      <h3>Future Directions</h3>
+      <div class="meta">Research &amp; Clinical Goals</div>
+      <p>
+        My ongoing focus is on integrating artificial intelligence and deep learning with clinical cardiology
+        and pulmonary medicine to improve early detection and treatment of cardiovascular and oncological
+        diseases. I aim to continue translational research bridging computational methods and clinical
+        practice, with particular emphasis on lung nodule growth prediction, federated learning for
+        privacy-preserving medical AI, and cardiovascular intervention optimization.
+      </p>
+      <br>
+      <p>
+        I am actively exploring opportunities in international medical collaboration and academic medicine
+        across Taiwan, Canada, and the Asia-Pacific region, with the goal of fostering cross-institutional
+        research networks.
+      </p>
+    </div>
+  </section>
+
+  <!-- Selected Publications -->
+  <section id="publications">
+    <div class="section-title">Selected Recent Publications</div>
+    <p style="font-size:0.85rem;color:#666;margin-bottom:16px;font-family:Arial,sans-serif;">
+      50+ total publications &nbsp;|&nbsp; 13 first / corresponding author &nbsp;|&nbsp;
+      <a href="https://scholar.google.com/citations?user=dsih3e4AAAAJ" target="_blank" style="color:#2d6a9f;">View full list on Google Scholar</a>
+    </p>
+    <ul class="pub-list">
+      <li>
+        <strong>Li AH</strong> et al. Neurological complications following cerebral angiography: a case of contrast-induced encephalopathy.
+        <em>BMC Neurology</em> 26, 26 (2026).
+      </li>
+      <li>
+        Lin YC, Chen YC, Tu CM, Chang YY, Hsu JC, Wu YW, <strong>Li AH</strong> et al.
+        Differential Predictors of Severe Versus Milder Radial Artery Spasm.
+        <em>Catheterization and Cardiovascular Interventions</em> (2026).
+      </li>
+      <li>
+        Nguyen DK, <strong>Li AHA</strong>, Lai YJ, Yang PC, Chan CL.
+        A Timeseries-based Multimodal Deep Learning Approach for Lung Nodule Growth Prediction.
+        <em>Journal of Imaging Informatics in Medicine</em> (2025).
+      </li>
+      <li>
+        Chang ST, Chuang YF, <strong>Li AH</strong> et al.
+        Age-dependent immune profile in healthy individuals: an original study, systematic review and meta-analysis.
+        <em>Immunity &amp; Ageing</em> 21(1), 75 (2024).
+      </li>
+      <li>
+        <strong>Li AHA</strong>, Nguyen DK, Lai YJ, et al.
+        A deep learning approach to Lung Nodule Growth Prediction using CT image combined with Demographic and image features.
+        <em>ICMHI 2023</em>.
+      </li>
+      <li>
+        <strong>Li AH</strong>, Guo J, Liu HM, Liu XQ.
+        Intravascular ultrasound guided vertebral artery stenting after basilar artery thrombectomy for acute brain stem stroke.
+        <em>J Clin Ultrasound</em> 51(7):1261–1263 (2023).
+      </li>
+      <li>
+        <strong>Li AH</strong>, Liu PP, Villarreal FJ, Garcia RA.
+        Dynamic changes in myocardial matrix and relevance to disease: translational perspectives.
+        <em>Circulation Research</em> 114(5):916–27 (2014).
+      </li>
+    </ul>
+  </section>
+
+  <!-- Biomedical News -->
+  <section id="news">
+    <div class="section-title">Top 5 Biomedical News This Week</div>
+    <p style="font-size:0.85rem;color:#666;margin-bottom:20px;font-family:Arial,sans-serif;">
+      Week of April 14–20, 2026 &nbsp;|&nbsp; Curated from leading biomedical sources
+    </p>
+
+    <div class="news-card">
+      <span class="news-num">NEWS 1</span>
+      <h3>T Cells Supercharged Against Cancer</h3>
+      <p>
+        Scientists discovered that blocking the protein <strong>Ant2</strong> forces T cells to rewire their
+        energy metabolism — making them more powerful, resilient, and effective at identifying and destroying
+        cancer cells. The breakthrough may lead to next-generation immunotherapy strategies.
+      </p>
+    </div>
+
+    <div class="news-card">
+      <span class="news-num">NEWS 2</span>
+      <h3>RNA Barcodes Map Brain Neuron Connections with Single-Synapse Precision</h3>
+      <p>
+        Researchers developed a cutting-edge technique using <strong>RNA "barcodes"</strong> to map synaptic
+        connectivity among neurons. The method captures thousands of neural links at single-synapse resolution,
+        opening new windows into brain circuit architecture and neurological disease.
+      </p>
+    </div>
+
+    <div class="news-card">
+      <span class="news-num">NEWS 3</span>
+      <h3>Reversible Non-Hormonal Male Contraception — A Breakthrough at Cornell</h3>
+      <p>
+        Scientists at <strong>Cornell University</strong> announced progress toward a safe, reversible,
+        non-hormonal male contraceptive that completely halts sperm production without affecting hormone
+        levels — a long-sought advance in reproductive medicine.
+      </p>
+    </div>
+
+    <div class="news-card">
+      <span class="news-num">NEWS 4</span>
+      <h3>Nanodisc Platform Reveals HIV &amp; Ebola Viral Vulnerabilities</h3>
+      <p>
+        A novel <strong>nanodisc-based platform</strong> allows scientists to study viral membrane proteins
+        in a near-native lipid environment, faithfully mimicking real viruses. The platform revealed how
+        antibodies recognize HIV and Ebola envelope proteins, accelerating vaccine and therapeutic development.
+      </p>
+    </div>
+
+    <div class="news-card">
+      <span class="news-num">NEWS 5</span>
+      <h3>AI Microbiome Analysis Detects Colorectal Cancer — No Colonoscopy Needed</h3>
+      <p>
+        Researchers used <strong>AI-driven gut microbiome mapping</strong> to identify subtle microbial
+        signatures linked to colorectal cancer — without requiring invasive colonoscopy. This non-invasive
+        diagnostic approach could transform cancer screening, particularly in resource-limited settings.
+      </p>
+    </div>
+
+    <p style="font-size:0.78rem;color:#999;margin-top:10px;font-family:Arial,sans-serif;">
+      Sources: ScienceDaily, BioSpace, BioPharma Dive, BioWorld, Medscape &mdash; April 2026
+    </p>
+  </section>
+
+</div><!-- /container -->
+
+<!-- Contact -->
+<section id="contact" style="background:#1a3a5c;color:#cde4f5;padding:52px 20px;">
+  <div style="max-width:700px;margin:0 auto;">
+    <div style="font-size:1.35rem;color:#7ec8e3;border-bottom:2px solid #2d6a9f;padding-bottom:8px;margin-bottom:28px;font-family:Arial,sans-serif;letter-spacing:0.03em;text-transform:uppercase;font-weight:bold;">
+      Contact
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;font-family:Arial,sans-serif;font-size:0.9rem;">
+      <div>
+        <div style="color:#7ec8e3;font-weight:bold;margin-bottom:8px;">Email</div>
+        <div><a href="mailto:las1012.tw@gmail.com" style="color:#cde4f5;">las1012.tw@gmail.com</a></div>
+        <div><a href="mailto:las1012.tw@yahoo.com.tw" style="color:#cde4f5;">las1012.tw@yahoo.com.tw</a></div>
+      </div>
+      <div>
+        <div style="color:#7ec8e3;font-weight:bold;margin-bottom:8px;">Phone</div>
+        <div>Canada: +1-905-206-1824</div>
+        <div>Taiwan Mobile: +886-926-443-678</div>
+      </div>
+      <div>
+        <div style="color:#7ec8e3;font-weight:bold;margin-bottom:8px;">Canada Address</div>
+        <div>1713 Chalkdene Grove<br>Mississauga, Ontario, L4W 2C2</div>
+      </div>
+      <div>
+        <div style="color:#7ec8e3;font-weight:bold;margin-bottom:8px;">Taiwan Address</div>
+        <div>18F-3, LN 11, Nan-Ya S Rd<br>Banciao District, New Taipei City 220</div>
+      </div>
+    </div>
+    <div style="margin-top:28px;font-family:Arial,sans-serif;font-size:0.88rem;">
+      <span style="color:#7ec8e3;font-weight:bold;">Google Scholar: </span>
+      <a href="https://scholar.google.com/citations?user=dsih3e4AAAAJ" target="_blank" style="color:#a8d8f8;">
+        scholar.google.com/citations?user=dsih3e4AAAAJ
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2026 Ai-Hsien Adams Li, MD, PhD, MPH &nbsp;|&nbsp; Far Eastern Memorial Hospital, New Taipei City, Taiwan</p>
+  <p style="margin-top:6px;">Last updated: April 2026</p>
+</footer>
+
+</body>
+</html>
