@@ -672,7 +672,7 @@
           <div style="flex:1;min-width:210px;">
             <div style="color:#7ec8e3;font-family:Arial,sans-serif;font-size:0.72rem;font-weight:bold;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;">&#128197; Curated Picks — Weekly Review</div>
             <div style="color:#cde4f5;font-family:Arial,sans-serif;font-size:0.83rem;line-height:1.68;">
-              The <strong style="color:#fff;">Top 5 Featured Stories</strong> are hand-selected by the author and updated <strong style="color:#f0c040;">every Monday</strong>, spotlighting the most impactful discoveries of the week from leading biomedical journals and news outlets.
+              The <strong style="color:#fff;">Top 5 Featured Stories</strong> are hand-selected and manually updated by the author <strong style="color:#f0c040;">every Monday</strong>. The live feed below this section updates <strong style="color:#f0c040;">automatically every time the page loads</strong>.
             </div>
           </div>
           <div style="flex:1;min-width:210px;">
@@ -759,27 +759,28 @@
       var el = document.getElementById('next-monday-text');
       if (!el) return;
       if (daysUntil === 0) {
-        el.innerHTML = '<strong style="color:#f0c040;">Today is Monday — curated picks freshly updated!</strong>';
+        el.innerHTML = '<strong style="color:#f0c040;">Today is Monday — author reviews &amp; updates curated picks today!</strong>';
       } else {
         var next = new Date(now);
         next.setDate(now.getDate() + daysUntil);
         var opts = { month: 'long', day: 'numeric' };
-        el.innerHTML = 'Next curated update: <strong style="color:#f0c040;">Monday, ' +
+        el.innerHTML = 'Next manual review by author: <strong style="color:#f0c040;">Monday, ' +
           next.toLocaleDateString('en-US', opts) + ' (' + daysUntil +
           ' day' + (daysUntil > 1 ? 's' : '') + ' from now)</strong>';
       }
     })();
 
-    /* ── Live RSS feed ── */
+    /* ── Live RSS feed — tries 2 APIs with fallback ── */
     (function() {
       var RSS_URL = 'https://www.sciencedaily.com/rss/health_medicine.xml';
-      var API_URL = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(RSS_URL) + '&count=5';
+      var API1 = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(RSS_URL) + '&count=5';
+      var API2 = 'https://api.allorigins.win/get?url=' + encodeURIComponent(RSS_URL);
 
       function formatDate(dateStr) {
         try {
           var d = new Date(dateStr);
           return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        } catch(e) { return dateStr; }
+        } catch(e) { return ''; }
       }
 
       function stripHtml(html) {
@@ -788,14 +789,11 @@
         return tmp.textContent || tmp.innerText || '';
       }
 
-      function renderNews(items) {
+      function renderItems(items) {
         var container = document.getElementById('live-news-container');
-        if (!items || items.length === 0) {
-          container.innerHTML = '<p style="color:#8ab4cc;font-family:Arial,sans-serif;font-size:0.88rem;">Could not load live news. Please check back later.</p>';
-          return;
-        }
+        if (!items || items.length === 0) { showError(); return; }
         var html = '';
-        items.forEach(function(item, i) {
+        items.slice(0, 5).forEach(function(item, i) {
           var desc = stripHtml(item.description || '');
           if (desc.length > 220) desc = desc.substring(0, 220) + '...';
           html += '<div class="news-card" style="border-left-color:#4a9edd;">' +
@@ -804,27 +802,60 @@
             item.title + ' &#8599;</a></h3>' +
             '<p style="margin-top:6px;">' + desc + '</p>' +
             '<p style="margin-top:6px;font-size:0.78rem;color:#4a9edd;font-family:Arial,sans-serif;">' +
-            'ScienceDaily &mdash; ' + formatDate(item.pubDate) + '</p>' +
+            'ScienceDaily &mdash; ' + formatDate(item.pubDate || item.pubdate || '') + '</p>' +
             '</div>';
         });
         container.innerHTML = html;
         var ts = document.getElementById('news-timestamp');
-        if (ts) ts.textContent = 'Feed last fetched: ' + new Date().toLocaleString('en-US');
+        if (ts) ts.textContent = 'Live feed loaded: ' + new Date().toLocaleString('en-US');
       }
 
-      fetch(API_URL)
+      function parseXML(xmlStr) {
+        try {
+          var parser = new DOMParser();
+          var xml = parser.parseFromString(xmlStr, 'text/xml');
+          var nodes = xml.querySelectorAll('item');
+          var result = [];
+          nodes.forEach(function(node) {
+            var get = function(tag) {
+              var el = node.querySelector(tag);
+              return el ? el.textContent.trim() : '';
+            };
+            var link = get('link');
+            if (!link) {
+              var linkEl = node.getElementsByTagName('link')[0];
+              link = linkEl ? (linkEl.textContent || linkEl.nextSibling && linkEl.nextSibling.nodeValue || '') : '';
+            }
+            result.push({ title: get('title'), link: link.trim(), description: get('description'), pubDate: get('pubDate') });
+          });
+          return result;
+        } catch(e) { return []; }
+      }
+
+      function showError() {
+        var c = document.getElementById('live-news-container');
+        c.innerHTML = '<p style="color:#8ab4cc;font-family:Arial,sans-serif;font-size:0.88rem;">' +
+          'Live feed temporarily unavailable. Visit ' +
+          '<a href="https://www.sciencedaily.com/news/health_medicine/" target="_blank" style="color:#7ec8e3;">' +
+          'ScienceDaily</a> directly for the latest news.</p>';
+      }
+
+      /* Try API1 (rss2json), fall back to API2 (allorigins XML proxy) */
+      fetch(API1)
         .then(function(r) { return r.json(); })
         .then(function(data) {
-          if (data.status === 'ok' && data.items) {
-            renderNews(data.items);
-          } else { throw new Error('Feed error'); }
+          if (data.status === 'ok' && data.items && data.items.length > 0) {
+            renderItems(data.items);
+          } else { throw new Error('rss2json empty'); }
         })
         .catch(function() {
-          var c = document.getElementById('live-news-container');
-          c.innerHTML = '<p style="color:#8ab4cc;font-family:Arial,sans-serif;font-size:0.88rem;">' +
-            'Live feed temporarily unavailable. Please visit ' +
-            '<a href="https://www.sciencedaily.com/news/health_medicine/" target="_blank" style="color:#7ec8e3;">' +
-            'ScienceDaily Health &amp; Medicine</a> for the latest news.</p>';
+          fetch(API2)
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+              var items = data.contents ? parseXML(data.contents) : [];
+              if (items.length > 0) { renderItems(items); } else { showError(); }
+            })
+            .catch(showError);
         });
     })();
   </script>
