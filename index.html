@@ -678,7 +678,7 @@
           <div style="flex:1;min-width:210px;">
             <div style="color:#7ec8e3;font-family:Arial,sans-serif;font-size:0.72rem;font-weight:bold;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;">&#9889; Live Feed — Always Current</div>
             <div style="color:#cde4f5;font-family:Arial,sans-serif;font-size:0.83rem;line-height:1.68;">
-              The <strong style="color:#fff;">Live News Feed</strong> below automatically retrieves the <strong style="color:#f0c040;">5 most recent</strong> biomedical stories from ScienceDaily via RSS — refreshed <strong style="color:#f0c040;">every time this page loads</strong>, no manual updates needed.
+              The <strong style="color:#fff;">Live News Feed</strong> below automatically retrieves the <strong style="color:#f0c040;">8 most recent</strong> biomedical stories from ScienceDaily via RSS — refreshed <strong style="color:#f0c040;">every time this page loads</strong>, no manual updates needed.
             </div>
           </div>
         </div>
@@ -734,7 +734,7 @@
       <div style="margin-top:52px;">
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
           <div style="height:1px;flex:1;background:linear-gradient(90deg,transparent,rgba(74,158,221,0.45));"></div>
-          <div style="color:#7ec8e3;font-family:Arial,sans-serif;font-size:0.72rem;font-weight:bold;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;">&#128257; Live Feed — Auto-Updated on Every Visit</div>
+          <div style="color:#7ec8e3;font-family:Arial,sans-serif;font-size:0.72rem;font-weight:bold;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;">&#128257; Live Feed — 8 Latest Stories, Auto-Updated on Every Visit</div>
           <div style="height:1px;flex:1;background:linear-gradient(270deg,transparent,rgba(74,158,221,0.45));"></div>
         </div>
         <p style="color:#8ab4cc;font-family:Arial,sans-serif;font-size:0.8rem;margin-bottom:18px;">
@@ -773,7 +773,7 @@
     /* ── Live RSS feed — tries 2 APIs with fallback ── */
     (function() {
       var RSS_URL = 'https://www.sciencedaily.com/rss/health_medicine.xml';
-      var API1 = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(RSS_URL) + '&count=5';
+      var API1 = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(RSS_URL) + '&count=8';
       var API2 = 'https://api.allorigins.win/get?url=' + encodeURIComponent(RSS_URL);
 
       function formatDate(dateStr) {
@@ -793,7 +793,7 @@
         var container = document.getElementById('live-news-container');
         if (!items || items.length === 0) { showError(); return; }
         var html = '';
-        items.slice(0, 5).forEach(function(item, i) {
+        items.slice(0, 8).forEach(function(item, i) {
           var desc = stripHtml(item.description || '');
           if (desc.length > 220) desc = desc.substring(0, 220) + '...';
           html += '<div class="news-card" style="border-left-color:#4a9edd;">' +
