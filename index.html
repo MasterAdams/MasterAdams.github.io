@@ -770,93 +770,87 @@
       }
     })();
 
-    /* ── Live RSS feed — tries 2 APIs with fallback ── */
+    /* ── Live RSS feed — 4-source fallback chain ── */
     (function() {
-      var RSS_URL = 'https://www.sciencedaily.com/rss/health_medicine.xml';
-      var API1 = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(RSS_URL) + '&count=8';
-      var API2 = 'https://api.allorigins.win/get?url=' + encodeURIComponent(RSS_URL);
+      var RSS = 'https://www.sciencedaily.com/rss/health_medicine.xml';
+      var enc = encodeURIComponent(RSS);
 
-      function formatDate(dateStr) {
+      /* Priority list: first success wins */
+      var SOURCES = [
+        { url: 'https://api.rss2json.com/v1/api.json?rss_url=' + enc + '&count=8', mode: 'rss2json' },
+        { url: 'https://corsproxy.io/?' + enc,                                       mode: 'xml'     },
+        { url: 'https://api.allorigins.win/raw?url=' + enc,                          mode: 'xml'     },
+        { url: 'https://api.allorigins.win/get?url=' + enc,                          mode: 'wrapped' }
+      ];
+
+      function formatDate(s) {
+        try { return new Date(s).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}); }
+        catch(e) { return ''; }
+      }
+      function stripHtml(h) {
+        var d = document.createElement('div'); d.innerHTML = h;
+        return d.textContent || d.innerText || '';
+      }
+
+      function parseXML(xml) {
         try {
-          var d = new Date(dateStr);
-          return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        } catch(e) { return ''; }
+          var doc = new DOMParser().parseFromString(xml, 'text/xml');
+          return Array.from(doc.querySelectorAll('item')).slice(0,8).map(function(n) {
+            var g = function(t){ var e=n.querySelector(t); return e?e.textContent.trim():''; };
+            /* <link> in RSS 2.0 is often a bare text node after the tag */
+            var linkEl = n.querySelector('link');
+            var link = linkEl ? linkEl.textContent.trim() : '';
+            if (!link && linkEl && linkEl.nextSibling) link = linkEl.nextSibling.nodeValue.trim();
+            return { title:g('title'), link:link, description:g('description'), pubDate:g('pubDate') };
+          }).filter(function(i){ return i.title && i.link; });
+        } catch(e) { return []; }
       }
 
-      function stripHtml(html) {
-        var tmp = document.createElement('div');
-        tmp.innerHTML = html;
-        return tmp.textContent || tmp.innerText || '';
-      }
-
-      function renderItems(items) {
-        var container = document.getElementById('live-news-container');
-        if (!items || items.length === 0) { showError(); return; }
-        var html = '';
-        items.slice(0, 8).forEach(function(item, i) {
+      function render(items) {
+        var box = document.getElementById('live-news-container');
+        if (!items || !items.length) { showError(); return; }
+        box.innerHTML = items.map(function(item, i) {
           var desc = stripHtml(item.description || '');
-          if (desc.length > 220) desc = desc.substring(0, 220) + '...';
-          html += '<div class="news-card" style="border-left-color:#4a9edd;">' +
-            '<span class="news-num pulse-live" style="background:#4a9edd;">LIVE ' + (i + 1) + '</span>' +
+          if (desc.length > 220) desc = desc.slice(0,220) + '...';
+          return '<div class="news-card" style="border-left-color:#4a9edd;">' +
+            '<span class="news-num pulse-live" style="background:#4a9edd;">LIVE ' + (i+1) + '</span>' +
             '<h3><a href="' + item.link + '" target="_blank" style="color:#1a3a5c;text-decoration:none;">' +
             item.title + ' &#8599;</a></h3>' +
             '<p style="margin-top:6px;">' + desc + '</p>' +
             '<p style="margin-top:6px;font-size:0.78rem;color:#4a9edd;font-family:Arial,sans-serif;">' +
-            'ScienceDaily &mdash; ' + formatDate(item.pubDate || item.pubdate || '') + '</p>' +
-            '</div>';
-        });
-        container.innerHTML = html;
+            'ScienceDaily &mdash; ' + formatDate(item.pubDate) + '</p></div>';
+        }).join('');
         var ts = document.getElementById('news-timestamp');
         if (ts) ts.textContent = 'Live feed loaded: ' + new Date().toLocaleString('en-US');
       }
 
-      function parseXML(xmlStr) {
-        try {
-          var parser = new DOMParser();
-          var xml = parser.parseFromString(xmlStr, 'text/xml');
-          var nodes = xml.querySelectorAll('item');
-          var result = [];
-          nodes.forEach(function(node) {
-            var get = function(tag) {
-              var el = node.querySelector(tag);
-              return el ? el.textContent.trim() : '';
-            };
-            var link = get('link');
-            if (!link) {
-              var linkEl = node.getElementsByTagName('link')[0];
-              link = linkEl ? (linkEl.textContent || linkEl.nextSibling && linkEl.nextSibling.nodeValue || '') : '';
-            }
-            result.push({ title: get('title'), link: link.trim(), description: get('description'), pubDate: get('pubDate') });
-          });
-          return result;
-        } catch(e) { return []; }
-      }
-
       function showError() {
-        var c = document.getElementById('live-news-container');
-        c.innerHTML = '<p style="color:#8ab4cc;font-family:Arial,sans-serif;font-size:0.88rem;">' +
-          'Live feed temporarily unavailable. Visit ' +
-          '<a href="https://www.sciencedaily.com/news/health_medicine/" target="_blank" style="color:#7ec8e3;">' +
-          'ScienceDaily</a> directly for the latest news.</p>';
+        document.getElementById('live-news-container').innerHTML =
+          '<p style="color:#8ab4cc;font-family:Arial,sans-serif;font-size:0.88rem;">' +
+          'Live feed temporarily unavailable. Visit <a href="https://www.sciencedaily.com/news/health_medicine/" ' +
+          'target="_blank" style="color:#7ec8e3;">ScienceDaily</a> directly for the latest news.</p>';
       }
 
-      /* Try API1 (rss2json), fall back to API2 (allorigins XML proxy) */
-      fetch(API1)
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-          if (data.status === 'ok' && data.items && data.items.length > 0) {
-            renderItems(data.items);
-          } else { throw new Error('rss2json empty'); }
-        })
-        .catch(function() {
-          fetch(API2)
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
-              var items = data.contents ? parseXML(data.contents) : [];
-              if (items.length > 0) { renderItems(items); } else { showError(); }
-            })
-            .catch(showError);
-        });
+      function trySource(i) {
+        if (i >= SOURCES.length) { showError(); return; }
+        var s = SOURCES[i];
+        fetch(s.url)
+          .then(function(r) { return s.mode==='rss2json' ? r.json() : r.text(); })
+          .then(function(data) {
+            var items = null;
+            if (s.mode === 'rss2json') {
+              if (data.status==='ok' && data.items && data.items.length) items = data.items.slice(0,8);
+            } else if (s.mode === 'wrapped') {
+              try { var obj=JSON.parse(data); if(obj.contents) items=parseXML(obj.contents); } catch(e){}
+            } else {
+              items = parseXML(data);
+            }
+            if (items && items.length) { render(items); } else { trySource(i+1); }
+          })
+          .catch(function() { trySource(i+1); });
+      }
+
+      trySource(0);
     })();
   </script>
 
