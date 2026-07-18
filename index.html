@@ -185,6 +185,74 @@
       margin-top: 4px;
     }
 
+    /* ── Research Impact ── */
+    .impact-intro {
+      font-family: Arial, sans-serif;
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 20px;
+      max-width: 72ch;
+    }
+    .impact-metrics {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .impact-metrics thead th {
+      background: #1a3a5c;
+      color: #cde4f5;
+      font-family: Arial, sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: normal;
+      padding: 13px 22px;
+      text-align: left;
+    }
+    .impact-metrics thead th.n { text-align: right; }
+    .impact-metrics tbody td {
+      padding: 15px 22px;
+      border-bottom: 1px solid #e6ebf1;
+    }
+    .impact-metrics tbody tr:last-child td { border-bottom: none; }
+    .impact-metrics .metric {
+      font-family: Arial, sans-serif;
+      font-size: 0.9rem;
+      color: #1a3a5c;
+      font-weight: bold;
+    }
+    .impact-metrics .metric small {
+      display: block;
+      font-weight: normal;
+      font-size: 0.72rem;
+      color: #8a97a3;
+      margin-top: 2px;
+    }
+    .impact-metrics .val {
+      text-align: right;
+      font-size: 1.6rem;
+      color: #2d6a9f;
+      font-weight: bold;
+      font-variant-numeric: tabular-nums;
+    }
+    .impact-metrics .val.recent { color: #4a9edd; }
+    .impact-note {
+      font-family: Arial, sans-serif;
+      font-size: 0.85rem;
+      color: #555;
+      margin-top: 16px;
+      line-height: 1.65;
+      max-width: 76ch;
+    }
+    .impact-note a { color: #2d6a9f; }
+    @media (max-width: 620px) {
+      .impact-metrics thead th, .impact-metrics tbody td { padding: 11px 14px; }
+      .impact-metrics .val { font-size: 1.25rem; }
+    }
+
     /* ── Timeline ── */
     .timeline { list-style: none; position: relative; padding-left: 24px; }
     .timeline::before {
@@ -314,6 +382,7 @@
   <a href="#education">Education</a>
   <a href="#experience">Experience</a>
   <a href="#research">Research</a>
+  <a href="#impact">Impact</a>
   <a href="#publications">Publications</a>
   <a href="#news">Biomedical News</a>
   <a href="#contact">Contact</a>
@@ -604,6 +673,47 @@
         research networks.
       </p>
     </div>
+  </section>
+
+  <!-- Research Impact -->
+  <section id="impact">
+    <div class="section-title">Research Impact</div>
+    <p class="impact-intro">
+      Bibliometric snapshot from Google Scholar (July 2026). Each metric shows the all-time total
+      alongside output since 2021 &mdash; a measure of current research momentum.
+    </p>
+    <table class="impact-metrics">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th class="n">All-time</th>
+          <th class="n">Since 2021</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="metric">Total Citations</td>
+          <td class="val">1,290</td>
+          <td class="val recent">542</td>
+        </tr>
+        <tr>
+          <td class="metric">h-index<small>&ge; h papers each cited &ge; h times</small></td>
+          <td class="val">18</td>
+          <td class="val recent">12</td>
+        </tr>
+        <tr>
+          <td class="metric">i10-index<small>papers with &ge; 10 citations</small></td>
+          <td class="val">28</td>
+          <td class="val recent">12</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="impact-note">
+      Two-thirds of these metrics have accrued since 2021, reflecting an accelerating body of work
+      in interventional cardiology, neurointervention, and AI/ML biomedical imaging &mdash; an
+      associate-professor tier of research impact with strong recent momentum.
+      <a href="https://scholar.google.com/citations?user=dsih3e4AAAAJ" target="_blank">View full profile on Google Scholar</a>.
+    </p>
   </section>
 
   <!-- Selected Publications -->
